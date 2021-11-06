@@ -12,10 +12,10 @@ fs.promises.readdir(path.join(__dirname, 'secret-folder'), {withFileTypes: true}
                     stdout.write(path.extname(direntObject.name).slice(1) + ' - ');
                 } else {
                     stdout.write(direntObject.name + ' - ');
-                }    
+                }
                 stdout.write(stats.size + 'b' + '\n',);
             });
-        }            
+        }
     }
 }).catch(err => {
     console.log(err);
