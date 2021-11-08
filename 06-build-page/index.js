@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const fsPromises = fs.promises; 
+const fsPromises = fs.promises;
 
 async function createEmptyDir(pathToDir, dirName) {
     try {
@@ -18,10 +18,10 @@ async function createEmptyDir(pathToDir, dirName) {
     }
 }
 
-async function readDataFromFile(from) {
+async function readDataFromFile(filePath) {
     return new Promise((resolve, reject) => {
         let data = '';
-        const stream = fs.createReadStream(from, 'utf-8');
+        const stream = fs.createReadStream(filePath, 'utf-8');
         stream.on('data', chunk => data += chunk);
         stream.on('error', err => reject(err));
         

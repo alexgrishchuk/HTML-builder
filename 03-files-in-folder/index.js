@@ -7,13 +7,13 @@ fs.promises.readdir(path.join(__dirname, 'secret-folder'), {withFileTypes: true}
         if (direntObject.isFile()) {
             fs.stat(path.join(__dirname, 'secret-folder', direntObject.name), (err, stats) => {
                 let dotIndex = direntObject.name.lastIndexOf('.');
-                if (dotIndex !== -1) {
+                if ((dotIndex !== -1) && (dotIndex !== 0)) {
                     stdout.write(direntObject.name.slice(0, dotIndex) + ' - ');
                     stdout.write(path.extname(direntObject.name).slice(1) + ' - ');
                 } else {
                     stdout.write(direntObject.name + ' - ');
                 }
-                stdout.write(stats.size + 'b' + '\n',);
+                stdout.write(stats.size + ' bytes' + '\n',);
             });
         }
     }
