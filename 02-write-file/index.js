@@ -12,8 +12,11 @@ const rl = readline.createInterface({
 console.log("Enter text:");
 
 rl.on('line', (line) => {
-    if(line === "exit") exit();
-    output.write(line + '\n');
+    if(line === "exit") {
+        exit();
+    } else {
+        output.write(line + '\n');
+    }    
 });
 
 process.on('exit', () => {
