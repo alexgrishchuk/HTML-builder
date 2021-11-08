@@ -1,6 +1,6 @@
 const path = require('path');
 const fs = require('fs');
-const fsPromises = fs.promises; 
+const fsPromises = fs.promises;
 
 function clearDir(dest, srcFiles = []) {
     fsPromises.readdir(dest, {withFileTypes: true}).then(fileObjects => {
