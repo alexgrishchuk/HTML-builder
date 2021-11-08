@@ -2,26 +2,30 @@ const path = require('path');
 const fs = require('fs');
 const fsPromises = fs.promises;
 
-function clearDir(dirPath, srcFiles = []) {
-    fsPromises.readdir(dirPath, {withFileTypes: true}).then(fileObjects => {
-        for (let direntObject of fileObjects) {
-            if(!srcFiles.includes(direntObject.name)) {
-                fsPromises.rm(path.join(dirPath, direntObject.name), {recursive: true});
-            }
+async function createEmptyDir(pathToDir, dirName) {
+    try {
+        let fileObjects = await fsPromises.readdir(pathToDir, {withFileTypes: true});
+        
+        let dirNames = fileObjects.filter(item => item.isDirectory()).map(fileObject => fileObject.name);
+
+        if (dirNames.includes(dirName)) {
+            await fsPromises.rm(path.join(pathToDir, dirName), {recursive: true});
         }
-    }).catch(err => {
-        console.log(err);
-    })
+
+        await fsPromises.mkdir(path.join(pathToDir, dirName), {recursive: true});
+    } catch(err) {
+          console.log(err);
+    }
 }
 
-function copyDir(from, to) {
-    fsPromises.mkdir(to, {recursive: true})
+function copyDir(from, pathToDir, toDirName) {
+    let to = path.join(pathToDir, toDirName);
+    createEmptyDir(pathToDir, toDirName)
     .then(() => fsPromises.readdir(from, {withFileTypes: true}))
     .then(fileObjects => {
-        clearDir(to, fileObjects.map(fileObject => fileObject.name));
         for (let direntObject of fileObjects) {
             if (direntObject.isDirectory()) {
-                copyDir(path.join(from, direntObject.name), path.join(to, direntObject.name));
+                copyDir(path.join(from, direntObject.name), to, direntObject.name);
             } else if (direntObject.isFile()) {
                 fsPromises.copyFile(path.join(from, direntObject.name), path.join(to, direntObject.name));
             }
@@ -32,4 +36,4 @@ function copyDir(from, to) {
     });
 }
 
-copyDir(path.join(__dirname, 'files'), path.join(__dirname, 'files-copy'));
+copyDir(path.join(__dirname, 'files'), __dirname, 'files-copy');
